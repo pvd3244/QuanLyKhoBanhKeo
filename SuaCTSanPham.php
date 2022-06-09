@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Chi tiết sản phẩm</title>
+<title>Sửa thông tin chi tiết sản phẩm</title>
 	<meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,21 +20,23 @@
 		a{
 		text-decoration: none;
 		}
-		.footer{
-			margin-top: 15%;
-		}
-		.tbSanPham{
+		.tb{
 			display: flex;
 			justify-content: center;
 		}
-		.tbSanPham td{
+		.tb td{
 			padding: 5px;
-			border: 1px solid;
-			border-collapse: collapse;
 		}
-		.ql{
-			margin-left: 66.5%;
+		.footer{
+			
+		}
+		.hanSD{
+			width: 50px;
+		}
+		.sm{
+			margin-left: 49%;
 			margin-top: 10px;
+			margin-right: 10px;
 		}
 	</style>
 </head>
@@ -87,62 +89,34 @@
 	<?php
 	$conn = mysqli_connect("localhost","root","123456","quanlykhohang");
 	session_start();
+	$maCTSP = $_GET["id"];
+	$sql = "SELECT  tenSP,`ngaySanXuat`, `hanSD` 
+		FROM `chitietsanpham` INNER JOIN sanpham on sanpham.maSP = chitietsanpham.maSP
+		WHERE maCTSP = $maCTSP";
+	$sanPham = mysqli_fetch_assoc(mysqli_query($conn, $sql));
+	$date = date_create($sanPham["ngaySanXuat"]);
 	?>
 	<div>
 		<p align="right">Xin chào, <?php echo $_SESSION["tenNV"] ?> <a href="xulyDX.php">Đăng xuất</a></p>
 	</div>
-	<h2 align="center">Chi tiết sản phẩm</h2>
-	<table class="tbSanPham">
-		<tr>
-			<td>Tên sản phẩm</td>
-			<td>Đơn vị tính</td>
-			<td>Số lượng</td>
-			<td>Ngày sản xuất</td>
-			<td>Hạn sử dụng</td>
-			<td colspan="2">Chức năng</td>
-		</tr>
-		<?php
-			$maSP = $_GET["id"];
-			$_SESSION["maSP"] = $maSP;
-			$sqlGoiSanPham = "SELECT `tenSP`, `donViTinh` FROM `sanpham` WHERE maSP = $maSP";
-			$sanPham = mysqli_fetch_assoc(mysqli_query($conn, $sqlGoiSanPham));
-			$tenSP = $sanPham["tenSP"];
-			$donViTinh = $sanPham["donViTinh"];
-			$sqlCTSP = "SELECT `maCTSP`,`ngaySanXuat`, `hanSD` FROM `chitietsanpham` 
-			WHERE maSP = $maSP";
-			$CTSP = mysqli_query($conn, $sqlCTSP);
-			while($row = mysqli_fetch_assoc($CTSP)){
-				$date = date_create($row["ngaySanXuat"]);
-				$maCTSP = $row["maCTSP"];
-				$sqlGoiSoNhap = "SELECT  sum(soLuongNhap)
-				from phieunhapsanpham
-				WHERE maCTSP = $maCTSP
-				GROUP by maCTSP";
-				$soLuongNhap = mysqli_fetch_assoc(mysqli_query($conn, $sqlGoiSoNhap));
-				$sqlGoiSoXuat = "SELECT  sum(soLuongXuat)
-				from phieuxuatsanpham
-				WHERE maCTSP = $maCTSP
-				GROUP by maCTSP";
-				$soLuongXuat = mysqli_fetch_assoc(mysqli_query($conn, $sqlGoiSoXuat));
-				if($soLuongXuat)
-					$soLuong = $soLuongNhap["sum(soLuongNhap)"]-$soLuongXuat["sum(soLuongXuat)"];
-				else
-					$soLuong = $soLuongNhap["sum(soLuongNhap)"];
-		?>
-		<tr>
-			<td><?php echo $tenSP ?></td>
-			<td><?php echo $donViTinh ?></td>
-			<td><?php echo $soLuong ?></td>
-			<td><?php echo date_format($date,"d-m-Y") ?></td>
-			<td><?php echo $row["hanSD"] ?></td>
-			<td><a href="SuaCTSanPham.php?id=<?php echo $maCTSP ?>">Sửa</a></td>
-			<td><a href="#">Xóa</a></td>
-		</tr>
-		<?php
-			}
-		?>
-	</table>
-	<input class="ql" type="button" value="Quay lại" onClick="Quaylai()">
+	<form action="#" method="post">
+		<table class="tb">
+			<tr>
+				<td>Tên sản phẩm:</td>
+				<td><?php echo $sanPham["tenSP"] ?></td>
+			</tr>
+			<tr>
+				<td>Ngày sản xuất:</td>
+				<td><input type="date" name="ngaySX" value="<?php echo date_format($date,"d/m/Y") ?>"></td>
+			</tr>
+			<tr>
+				<td>Hạn sử dụng:</td>
+				<td><input type="text" class="hanSD" name="hanSD" value="<?php echo $sanPham["hanSD"] ?>"></td>
+			</tr>
+		</table>
+		<input type="submit" value="Cập nhật" class="sm">
+		<input type="button" value="Quay lại" onClick="DieuHuong()">
+	</form>
 	<div class="footer">
 		<div id="footer-wapper">
       <div class="container">
@@ -154,13 +128,10 @@
       by <a href="/" rel="nofllow" target="_blank">DHK Group</a>
    </div>
 	</div>
-	<?php
-	mysqli_close($conn);
-	?>
 </body>
 </html>
 <script>
-	function Quaylai(){
-		location.replace("SanPham.php");
+	function DieuHuong(){
+		location.replace("ChiTietSanPham.php?id=<?php echo $_SESSION["maSP"] ?>");
 	}
 </script>
