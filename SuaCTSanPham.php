@@ -20,6 +20,9 @@
 		a{
 		text-decoration: none;
 		}
+		h2{
+			margin-top: 3%;
+		}
 		.tb{
 			display: flex;
 			justify-content: center;
@@ -28,7 +31,7 @@
 			padding: 5px;
 		}
 		.footer{
-			
+			margin-top: 15%;
 		}
 		.hanSD{
 			width: 50px;
@@ -90,16 +93,17 @@
 	$conn = mysqli_connect("localhost","root","123456","quanlykhohang");
 	session_start();
 	$maCTSP = $_GET["id"];
+	$_SESSION["maCTSP"] = $maCTSP;
 	$sql = "SELECT  tenSP,`ngaySanXuat`, `hanSD` 
 		FROM `chitietsanpham` INNER JOIN sanpham on sanpham.maSP = chitietsanpham.maSP
 		WHERE maCTSP = $maCTSP";
 	$sanPham = mysqli_fetch_assoc(mysqli_query($conn, $sql));
-	$date = date_create($sanPham["ngaySanXuat"]);
 	?>
 	<div>
 		<p align="right">Xin chào, <?php echo $_SESSION["tenNV"] ?> <a href="xulyDX.php">Đăng xuất</a></p>
 	</div>
-	<form action="#" method="post">
+	<h2 align="center">Sửa chi tiết sản phẩm</h2>
+	<form action="xulySuaCTSP.php" method="post">
 		<table class="tb">
 			<tr>
 				<td>Tên sản phẩm:</td>
@@ -107,7 +111,7 @@
 			</tr>
 			<tr>
 				<td>Ngày sản xuất:</td>
-				<td><input type="date" name="ngaySX" value="<?php echo date_format($date,"d/m/Y") ?>"></td>
+				<td><input type="date" name="ngaySX" value="<?php echo $sanPham["ngaySanXuat"] ?>"></td>
 			</tr>
 			<tr>
 				<td>Hạn sử dụng:</td>

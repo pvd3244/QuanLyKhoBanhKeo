@@ -42,7 +42,7 @@
 	?>
 	<script>
 		function DieuHuong(){
-			alert("Không thể xóa sản phẩm có số lượng lớn hơn 0.");
+			alert("Không thể xóa loại sản phẩm có số lượng lớn hơn 0.");
 			location.replace("SanPham.php");
 		}
 		setTimeout('DieuHuong()', 1);

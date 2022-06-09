@@ -136,7 +136,7 @@
 			<td><?php echo date_format($date,"d-m-Y") ?></td>
 			<td><?php echo $row["hanSD"] ?></td>
 			<td><a href="SuaCTSanPham.php?id=<?php echo $maCTSP ?>">Sửa</a></td>
-			<td><a href="#">Xóa</a></td>
+			<td><a href="xulyXoaCTSP.php?id=<?php echo $maCTSP ?>">Xóa</a></td>
 		</tr>
 		<?php
 			}
