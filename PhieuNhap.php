@@ -42,7 +42,7 @@
 			margin-top: 10px;
 		}
 		.footer{
-			
+			margin-top: 8%;
 		}
 	</style>
 </head>

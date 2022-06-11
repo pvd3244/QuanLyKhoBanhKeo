@@ -38,9 +38,10 @@
 			padding: 5px;
 			border: 1px solid;
 		}
-		.ql{
-			margin-left: 77.5%;
+		.cn{
+			margin-left: 71.5%;
 			margin-top: 10px;
+			margin-right: 10px;
 		}
 	</style>
 </head>
@@ -94,6 +95,7 @@
 	$conn = mysqli_connect("localhost","root","123456","quanlykhohang");
 	session_start();
 	$maPN = $_GET['id'];
+	$_SESSION['maPN'] = $maPN;
 	$sql = "SELECT * FROM `phieunhap` 
 		WHERE maPhieu = $maPN";
 	$phieuNhap = mysqli_fetch_assoc(mysqli_query($conn,$sql));
@@ -103,7 +105,7 @@
 		<p align="right">Xin chào, <?php echo $_SESSION["tenNV"] ?> <a href="xulyDX.php">Đăng xuất</a></p>
 	</div>
 	<h2 align="center">Chi tiết phiếu nhập</h2>
-	<form action="#" method="post">
+	<form action="xulySuaPN.php" method="post">
 		<table class="tb1">
 			<tr>
 				<td>Mã phiếu nhập:</td>
@@ -118,7 +120,6 @@
 				<td><input type="date" name="ngayNhap" value="<?php echo($date) ?>"></td>
 			</tr>
 		</table>
-	</form>
 	<h3 align="center">Danh sách sản phẩm</h3>
 	<table class="tb2" cellpadding="0" cellspacing="0">
 		<tr>
@@ -161,7 +162,9 @@
 		}
 		?>
 	</table>
-	<input class="ql" type="button" value="Quay lại" onClick="Quaylai()">
+	<input type="submit" value="Hoàn tất" class="cn">
+	<input type="button" value="Quay lại" onClick="Quaylai()">
+	</form>
 	<div class="footer">
 		<div id="footer-wapper">
       <div class="container">

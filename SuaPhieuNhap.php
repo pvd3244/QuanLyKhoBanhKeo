@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Untitled Document</title>
+<title>Sửa sản phẩm nhập</title>
 	<meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,8 +20,20 @@
 		a{
 		text-decoration: none;
 		}
+		.tb{
+			display: flex;
+			justify-content: center;
+		}
+		.tb td{
+			padding: 5px;
+		}
+		.cn{
+			margin-left: 50%;
+			margin-right: 10px;
+			margin-top: 10px;
+		}
 		.footer{
-			
+			margin-top: 10%;
 		}
 	</style>
 </head>
@@ -74,10 +86,44 @@
 	<?php
 	$conn = mysqli_connect("localhost","root","123456","quanlykhohang");
 	session_start();
+	$maPN = $_SESSION["maPN"];
+	$maCTSP = $_GET["id"];
+	$_SESSION["maCTSP"] = $maCTSP;
+	$sqlSP = "SELECT tenSP, donViTinh 
+		FROM `chitietsanpham` INNER JOIN sanpham on chitietsanpham.maSP = sanpham.maSP
+		WHERE maCTSP = $maCTSP";
+	$sanPham = mysqli_fetch_assoc(mysqli_query($conn, $sqlSP));
+	$sqlPN = "SELECT `soLuongNhap`, `maKho` 
+		FROM `phieunhapsanpham` 
+		WHERE maCTSP = $maCTSP";
+	$PN = mysqli_fetch_assoc(mysqli_query($conn, $sqlPN));
 	?>
 	<div>
 		<p align="right">Xin chào, <?php echo $_SESSION["tenNV"] ?> <a href="xulyDX.php">Đăng xuất</a></p>
 	</div>
+	<h2 align="center">Sửa sản phẩm nhập</h2>
+	<form action="xulySuaSPN.php" method="post">
+		<table class="tb" cellpadding="0" cellspacing="0">
+			<tr>
+				<td>Tên sản phẩm</td>
+				<td><?php echo $sanPham["tenSP"] ?></td>
+			</tr>
+			<tr>
+				<td>Đơn vị tính</td>
+				<td><?php echo $sanPham["donViTinh"] ?></td>
+			</tr>
+			<tr>
+				<td>Số lượng nhập</td>
+				<td><input type="text" name="soLuongNhap" value="<?php echo $PN["soLuongNhap"] ?>"></td>
+			</tr>
+			<tr>
+				<td>Mã kho</td>
+				<td><?php echo $PN["maKho"] ?></td>
+			</tr>
+		</table>
+		<input type="submit" value="Cập nhật" class="cn" name="capnhat">
+		<input type="button" value="Quay lại" onClick="DieuHuong()">
+	</form>
 	<div class="footer">
 		<div id="footer-wapper">
       <div class="container">
@@ -91,3 +137,8 @@
 	</div>
 </body>
 </html>
+<script>
+	function DieuHuong(){
+		location.replace("ChiTietPhieuNhap.php?id=<?php echo $maPN ?>");
+	}
+</script>

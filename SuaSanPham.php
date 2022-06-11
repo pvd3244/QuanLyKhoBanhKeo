@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Untitled Document</title>
+<title>Sửa sản phẩm</title>
 	<meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -21,7 +21,17 @@
 		text-decoration: none;
 		}
 		.footer{
-			
+			margin-top: 10%;
+		}
+		.tb{
+			display: flex;
+			justify-content: center;
+		}
+		.tb td{
+			padding: 5px;
+		}
+		.cn{
+			margin-left: 51%;
 		}
 	</style>
 </head>
@@ -74,10 +84,45 @@
 	<?php
 	$conn = mysqli_connect("localhost","root","123456","quanlykhohang");
 	session_start();
+	$maSP = $_GET["id"];
+	$_SESSION["maSP"] = $maSP;
+	$sql = "SELECT  `tenSP`, `donViTinh`, `kichThuoc`, `loaiSP` FROM `sanpham` 
+		WHERE maSP = $maSP";
+	$sanPham = mysqli_fetch_assoc(mysqli_query($conn, $sql));
 	?>
 	<div>
 		<p align="right">Xin chào, <?php echo $_SESSION["tenNV"] ?> <a href="xulyDX.php">Đăng xuất</a></p>
 	</div>
+	<h2 align="center">Sửa sản phẩm</h2>
+	<form action="xulySuaSP.php" method="post">
+		<table class="tb" cellpadding="0" cellspacing="0">
+			<tr>
+				<td>Tên sản phẩm</td>
+				<td><input type="text" name="tenSP" value="<?php echo $sanPham["tenSP"] ?>"></td>
+			</tr>
+			<tr>
+				<td>Đơn vị tính</td>
+				<td><input type="text" name="donViTinh" value="<?php echo $sanPham["donViTinh"] ?>"></td>
+			</tr>
+			<tr>
+				<td>Kích thước</td>
+				<td><input type="text" name="kichThuoc" value="<?php echo $sanPham["kichThuoc"] ?>"></td>
+			</tr>
+			<tr>
+				<td>Loại sản phẩm</td>
+				<td><select name="loaiSP">
+					<option value="<?php echo $sanPham["loaiSP"] ?>"><?php echo $sanPham["loaiSP"] ?></option>
+					<option value="Loại 1">Loại 1(-20*C -> 0*C)</option>
+					<option value="Loại 2">Loại 2(1*C -> 18*C)</option>
+					<option value="Loại 3">Loại 3(19*C -> 26*C)</option>
+					<option value="Khác">Khác</option>
+					</select>
+				</td>
+			</tr>
+		</table>
+		<input type="submit" value="Cập nhật" class="cn">
+		<input type="button" value="Quay lại" onClick="DieuHuong()">
+	</form>
 	<div class="footer">
 		<div id="footer-wapper">
       <div class="container">
@@ -91,3 +136,8 @@
 	</div>
 </body>
 </html>
+<script>
+	function DieuHuong(){
+		location.replace("SanPham.php");
+	}
+</script>
