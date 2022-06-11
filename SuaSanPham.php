@@ -97,19 +97,19 @@
 	<form action="xulySuaSP.php" method="post">
 		<table class="tb" cellpadding="0" cellspacing="0">
 			<tr>
-				<td>Tên sản phẩm</td>
+				<td>Tên sản phẩm:</td>
 				<td><input type="text" name="tenSP" value="<?php echo $sanPham["tenSP"] ?>"></td>
 			</tr>
 			<tr>
-				<td>Đơn vị tính</td>
+				<td>Đơn vị tính:</td>
 				<td><input type="text" name="donViTinh" value="<?php echo $sanPham["donViTinh"] ?>"></td>
 			</tr>
 			<tr>
-				<td>Kích thước</td>
+				<td>Kích thước:</td>
 				<td><input type="text" name="kichThuoc" value="<?php echo $sanPham["kichThuoc"] ?>"></td>
 			</tr>
 			<tr>
-				<td>Loại sản phẩm</td>
+				<td>Loại sản phẩm:</td>
 				<td><select name="loaiSP">
 					<option value="<?php echo $sanPham["loaiSP"] ?>"><?php echo $sanPham["loaiSP"] ?></option>
 					<option value="Loại 1">Loại 1(-20*C -> 0*C)</option>
