@@ -97,6 +97,7 @@
 		FROM `phieunhapsanpham` 
 		WHERE maCTSP = $maCTSP";
 	$PN = mysqli_fetch_assoc(mysqli_query($conn, $sqlPN));
+	$_SESSION["maKho"] = $PN["maKho"];
 	?>
 	<div>
 		<p align="right">Xin chào, <?php echo $_SESSION["tenNV"] ?> <a href="xulyDX.php">Đăng xuất</a></p>
@@ -105,19 +106,19 @@
 	<form action="xulySuaSPN.php" method="post">
 		<table class="tb" cellpadding="0" cellspacing="0">
 			<tr>
-				<td>Tên sản phẩm</td>
+				<td>Tên sản phẩm:</td>
 				<td><?php echo $sanPham["tenSP"] ?></td>
 			</tr>
 			<tr>
-				<td>Đơn vị tính</td>
+				<td>Đơn vị tính:</td>
 				<td><?php echo $sanPham["donViTinh"] ?></td>
 			</tr>
 			<tr>
-				<td>Số lượng nhập</td>
+				<td>Số lượng nhập:</td>
 				<td><input type="text" name="soLuongNhap" value="<?php echo $PN["soLuongNhap"] ?>"></td>
 			</tr>
 			<tr>
-				<td>Mã kho</td>
+				<td>Mã kho:</td>
 				<td><?php echo $PN["maKho"] ?></td>
 			</tr>
 		</table>
