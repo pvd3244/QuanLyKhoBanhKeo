@@ -30,7 +30,7 @@
 			justify-content: center;
 		}
 		.them{
-			margin-left: 25%;
+			margin-left: 24%;
 			margin-bottom: 10px;
 		}
 		.nhap{
@@ -38,7 +38,7 @@
 			margin-left: 10px;
 		}
 		.ql{
-			margin-left: 68%;
+			margin-left: 69%;
 			margin-top: 10px;
 		}
 		.footer{
@@ -110,7 +110,7 @@
 			<td>Đơn vị tính</td>
 			<td>Kích thước</td>
 			<td>Loại sản phẩm</td>
-			<td colspan="2">Chức năng</td>
+			<td colspan="3" align="center">Chức năng</td>
 		</tr>
 		<?php
 			$sqlGoiSanPham = "SELECT * FROM `sanpham`";
@@ -142,6 +142,7 @@
 			<td><?php echo $row["kichThuoc"] ?></td>
 			<td><?php echo $row["loaiSP"] ?></td>
 			<td><a href="ChiTietSanPham.php?id=<?php echo $maSP ?>">Chi tiết</a></td>
+			<td><a href="SuaSanPham.php?id=<?php echo $maSP ?>">Sửa</a></td>
 			<td><a href="xulyXoaSP.php?id=<?php echo $maSP ?>">Xóa</a></td>
 		</tr>
 		<?php
