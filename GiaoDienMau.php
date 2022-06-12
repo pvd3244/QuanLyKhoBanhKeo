@@ -21,7 +21,7 @@
 		text-decoration: none;
 		}
 		.footer{
-			
+			margin-top: 8%;
 		}
 	</style>
 </head>
@@ -47,7 +47,7 @@
                      </a>
                   </li>
                   <li class="nav-item" id="">
-                     <a class="nav-link" href="">
+                     <a class="nav-link" href="SanPham.php">
                         Quản lý sản phẩm
                      </a>
                   </li>
@@ -57,7 +57,7 @@
                      </a>
                   </li>
                   <li class="nav-item">
-                     <a class="nav-link" href="">
+                     <a class="nav-link" href="DaiLy.php">
                         Quản lý đại lý
                      </a>
                   </li>
