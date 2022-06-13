@@ -95,7 +95,7 @@
 		<p align="right">Xin chào, <?php echo $_SESSION["tenNV"] ?> <a href="xulyDX.php">Đăng xuất</a></p>
 	</div>
 	<h2 align="center">Danh sách kho chứa</h2>
-	<input type="button" value="Thêm" class="them" onClick="Themmoi()">
+	<input type="button" value="Thêm kho chứa" class="them" onClick="Themmoi()">
 	<table>
 		<tr>
 			<td>Tên kho</td>
@@ -151,7 +151,7 @@
 			<td><?php echo $tinhTrang ?></td>
 			<td><a href="ChiTietKhoChua.php?id=<?php echo $dsKho["maKho"] ?>">Chi tiết</a></td>
 			<td><a href="SuaKhoChua.php?id=<?php echo $dsKho["maKho"] ?>">Sửa</a></td>
-			<td><a href="#">Xóa</a></td>
+			<td><a href="xulyXoaKho.php?id=<?php echo $dsKho["maKho"] ?>">Xóa</a></td>
 		</tr>
 		<?php
 			}

@@ -23,6 +23,18 @@
 		.footer{
 			margin-top: 8%;
 		}
+		table{
+			display: flex;
+			justify-content: center;
+		}
+		table td{
+			padding: 5px;
+		}
+		.them{
+			margin-left: 51%;
+			margin-top: 10px;
+			margin-right: 10px;
+		}
 	</style>
 </head>
 
@@ -78,8 +90,57 @@
 	<div>
 		<p align="right">Xin chào, <?php echo $_SESSION["tenNV"] ?> <a href="xulyDX.php">Đăng xuất</a></p>
 	</div>
-	<h2>Thêm kho chứa</h2>
-	<input type="button" value="Quay lại" onClick="DieuHuong()">
+	<h2 align="center">Thêm kho chứa</h2>
+	<form action="ThemKhoChua.php" method="post">
+		<table>
+			<tr>
+				<td>Tên kho:</td>
+				<td><input type="text" name="tenKho"></td>
+			</tr>
+			<tr>
+				<td>Địa chỉ:</td>
+				<td><input type="text" name="diaChi"></td>
+			</tr>
+			<tr>
+				<td>Kích thước:</td>
+				<td><input type="text" name="kichThuoc" placeholder="Đơn vị mét khối"></td>
+			</tr>
+			<tr>
+				<td>Loại kho:</td>
+				<td><select name="loaiKho">
+					<option value="Loại 1">Loại 1(-20*C -> 0*C)</option>
+					<option value="Loại 2">Loại 2(1*C -> 18*C)</option>
+					<option value="Loại 3">Loại 3(19*C -> 26*C)</option>
+					<option value="Khác">Khác</option>
+				</td>
+			</tr>
+		</table>
+		<input type="submit" value="Thêm" class="them" name="them">
+		<input type="button" value="Quay lại" onClick="DieuHuong()">
+	</form>
+	<?php
+	if(isset($_POST["them"])){
+		$tenKho = $_POST["tenKho"];
+		$diaChi = $_POST["diaChi"];
+		$kichThuoc = $_POST["kichThuoc"];
+		$loaiKho = $_POST["loaiKho"];
+		if($tenKho=="" || $diaChi=="" || $kichThuoc==""){
+			echo("<p align='center'>Vui lòng điền đầy đủ thông tin</p>");
+		}
+		else if(!is_numeric($kichThuoc)){
+			echo("<p align='center'>Kích thước của kho là một số</p>");
+		}
+		else{
+			$sql = "INSERT INTO `kho`(`tenKho`, `diaChi`, `kichThuoc`, `loaiKho`) VALUES ('$tenKho','$diaChi',$kichThuoc,'$loaiKho')";
+			mysqli_query($conn, $sql);
+			?>
+	<script>
+		location.replace("KhoChua.php");
+	</script>
+	<?php
+		}
+	}
+	?>
 	<div class="footer">
 		<div id="footer-wapper">
       <div class="container">

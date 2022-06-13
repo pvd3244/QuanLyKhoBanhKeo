@@ -23,6 +23,18 @@
 		.footer{
 			margin-top: 8%;
 		}
+		table{
+			display: flex;
+			justify-content: center;
+		}
+		table td{
+			padding: 5px;
+		}
+		.them{
+			margin-left: 49%;
+			margin-top: 10px;
+			margin-right: 10px;
+		}
 	</style>
 </head>
 
@@ -74,12 +86,43 @@
 	<?php
 	$conn = mysqli_connect("localhost","root","123456","quanlykhohang");
 	session_start();
+	$maKho = $_GET["id"];
+	$_SESSION["maKho"] = $maKho;
+	$sql = "SELECT `maKho`, `tenKho`, `diaChi`, `kichThuoc`, `loaiKho` FROM `kho` WHERE maKho = 		$maKho";
+	$row = mysqli_fetch_assoc(mysqli_query($conn,$sql));
 	?>
 	<div>
 		<p align="right">Xin chào, <?php echo $_SESSION["tenNV"] ?> <a href="xulyDX.php">Đăng xuất</a></p>
 	</div>
-	<h2>Sửa kho chứa</h2>
-	<input type="button" value="Quay lại" onClick="DieuHuong()">
+	<h2 align="center">Sửa kho chứa</h2>
+	<form action="xulySuaKho.php" method="post">
+		<table>
+			<tr>
+				<td>Tên kho:</td>
+				<td><input type="text" name="tenKho" value="<?php echo $row["tenKho"] ?>"></td>
+			</tr>
+			<tr>
+				<td>Địa chỉ:</td>
+				<td><input type="text" name="diaChi" value="<?php echo $row["diaChi"] ?>"></td>
+			</tr>
+			<tr>
+				<td>Kích thước:</td>
+				<td><input type="text" name="kichThuoc" value="<?php echo $row["kichThuoc"] ?>"></td>
+			</tr>
+			<tr>
+				<td>Loại kho:</td>
+				<td><select name="loaiKho">
+					<option value="<?php echo $row["loaiKho"] ?>"><?php echo $row["loaiKho"] ?></option>
+					<option value="Loại 1">Loại 1(-20*C -> 0*C)</option>
+					<option value="Loại 2">Loại 2(1*C -> 18*C)</option>
+					<option value="Loại 3">Loại 3(19*C -> 26*C)</option>
+					<option value="Khác">Khác</option>
+				</td>
+			</tr>
+		</table>
+		<input type="submit" value="Cập nhật" class="them" name="them">
+		<input type="button" value="Quay lại" onClick="DieuHuong()">
+	</form>
 	<div class="footer">
 		<div id="footer-wapper">
       <div class="container">
