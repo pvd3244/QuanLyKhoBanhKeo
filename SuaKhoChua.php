@@ -1,11 +1,11 @@
-<html lang="en">
-
+<html>
 <head>
-   <meta charset="UTF-8">
+<meta charset="utf-8">
+<title>Sửa kho chứa</title>
+	<meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-   <title>Cake</title>
-   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+	<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
       integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.2/font/bootstrap-icons.css" integrity="sha384-eoTu3+HydHRBIjnCVwsFyCpUDZHZSFKEJD0mc3ZqSBSb6YhZzRHeiomAUWCstIWo" crossorigin="anonymous">
    <link
@@ -16,15 +16,18 @@
     />
    <link rel="stylesheet" href="self.css">
    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<style>
-	a{
+	<style>
+		a{
 		text-decoration: none;
-	}
+		}
+		.footer{
+			margin-top: 8%;
+		}
 	</style>
 </head>
 
 <body>
-   <div id="navigation" class="">
+	<div id="navigation" class="">
       <nav class="navbar navbar-expand-lg">
          <div class="container-fluid">
             <a class="navbar-brand" href="TrangChu.php">
@@ -39,7 +42,7 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                <ul class="navbar-nav">
                   <li class="nav-item">
-                     <a class="nav-link" href="#">
+                     <a class="nav-link" href="TrangChu.php">
                         Trang chủ
                      </a>
                   </li>
@@ -68,57 +71,30 @@
          </div>
       </nav>
    </div>
-<?php
+	<?php
 	$conn = mysqli_connect("localhost","root","123456","quanlykhohang");
 	session_start();
 	?>
 	<div>
-		<p align="right">Xin chào, <a href="ThongTinNhanVien.php"><?php echo $_SESSION["tenNV"] ?></a> <a href="xulyDX.php">Đăng xuất</a></p>
+		<p align="right">Xin chào, <?php echo $_SESSION["tenNV"] ?> <a href="xulyDX.php">Đăng xuất</a></p>
 	</div>
-   <section class="slider">
-      <i class="fa fa-angle-left slider-prev" onclick="changeImage()"></i>
-      <div class="slider-wrapper">
-         <div class="slide-main" id="slideMain">
-               <div class="slider-item active">
-                  <img id="img1" alt="..." onclick="changeImage()"
-                     src="https://lh4.googleusercontent.com/-EU1KSZdZ9EQ/Xy4m7ghdVqI/AAAAAAAAACE/Sq0op9maOSMXKQpT8wQZF6y3gPv6ASOhACLcBGAsYHQ/d/banner-kingdom-1.jpg">
-               </div>
-               <!-- <div class="slider-item">
-                  <img alt="..."
-                     src="https://lh4.googleusercontent.com/-zHGXAq8h5CI/Xy4b_W4fjtI/AAAAAAAAABs/VcEuG64wnfI0hMcG53J6qTpuAClpmJw9gCLcBGAsYHQ/d/banner-kingdom.jpg">
-               </div> -->
-         </div>
-      </div>
-      <i class="fa fa-angle-right slider-next" onclick="changeImage()"></i>
-   </section>
-
-   <div id="footer-wapper">
+	<h2>Sửa kho chứa</h2>
+	<input type="button" value="Quay lại" onClick="DieuHuong()">
+	<div class="footer">
+		<div id="footer-wapper">
       <div class="container">
          <div class="no-items section" id="footer-wapper"></div>
       </div>
    </div>
-
-   <div class="copy-right-bottom text-center">
+	<div class="copy-right-bottom text-center">
       Copyright © 2022. <a class="sitename" href="/" title="Bánh trung thu Kingdom">Bánh trung thu Kingdom</a>, Design
       by <a href="/" rel="nofllow" target="_blank">DHK Group</a>
    </div>
+	</div>
 </body>
-<script>
-   window.addEventListener('load', function(){
-
-   });
-   var number = 0;
-   changeImage = function() {
-      var s1 = "https://lh4.googleusercontent.com/-EU1KSZdZ9EQ/Xy4m7ghdVqI/AAAAAAAAACE/Sq0op9maOSMXKQpT8wQZF6y3gPv6ASOhACLcBGAsYHQ/d/banner-kingdom-1.jpg" ;
-      var s2 = "https://lh4.googleusercontent.com/-zHGXAq8h5CI/Xy4b_W4fjtI/AAAAAAAAABs/VcEuG64wnfI0hMcG53J6qTpuAClpmJw9gCLcBGAsYHQ/d/banner-kingdom.jpg";
-      document.getElementById('img1').src= s2;
-      number = number + 1;
-      if (number > 1){
-         number = 0;
-         document.getElementById('img1').src= s1;
-      }
-   }
-   
-   setInterval(changeImage, 2000);
-</script>
 </html>
+<script>
+	function DieuHuong(){
+		location.replace("KhoChua.php");
+	}
+</script>
