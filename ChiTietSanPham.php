@@ -33,7 +33,7 @@
 			border-collapse: collapse;
 		}
 		.ql{
-			margin-left: 66.5%;
+			margin-left: 72%;
 			margin-top: 10px;
 		}
 	</style>
@@ -99,6 +99,8 @@
 			<td>Số lượng</td>
 			<td>Ngày sản xuất</td>
 			<td>Hạn sử dụng</td>
+			<td>Tên kho</td>
+			<td>Địa chỉ kho</td>
 			<td colspan="2">Chức năng</td>
 		</tr>
 		<?php
@@ -114,6 +116,14 @@
 			while($row = mysqli_fetch_assoc($CTSP)){
 				$date = date_create($row["ngaySanXuat"]);
 				$maCTSP = $row["maCTSP"];
+				
+				$sqlKho = "SELECT `maKho` FROM `phieunhapsanpham` WHERE maCTSP = $maCTSP";
+				$kho = mysqli_fetch_assoc(mysqli_query($conn,$sqlKho));
+				$maKho = $kho["maKho"];
+				
+				$sqlTTK = "SELECT  `tenKho`, `diaChi` FROM `kho` WHERE maKho = $maKho";
+				$ttKho = mysqli_fetch_assoc(mysqli_query($conn,$sqlTTK));
+				
 				$sqlGoiSoNhap = "SELECT  sum(soLuongNhap)
 				from phieunhapsanpham
 				WHERE maCTSP = $maCTSP
@@ -135,6 +145,8 @@
 			<td><?php echo $soLuong ?></td>
 			<td><?php echo date_format($date,"d-m-Y") ?></td>
 			<td><?php echo $row["hanSD"] ?></td>
+			<td><?php echo $ttKho["tenKho"] ?></td>
+			<td><?php echo $ttKho["diaChi"] ?></td>
 			<td><a href="SuaCTSanPham.php?id=<?php echo $maCTSP ?>">Sửa</a></td>
 			<td><a href="xulyXoaCTSP.php?id=<?php echo $maCTSP ?>">Xóa</a></td>
 		</tr>
