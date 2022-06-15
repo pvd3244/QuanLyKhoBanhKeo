@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Quản lý sản phẩm</title>
+<title>Chi tiết phiếu xuất</title>
 	<meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,30 +20,27 @@
 		a{
 		text-decoration: none;
 		}
-		.tbSanPham td{
-			border: 1px solid;
-			border-collapse: collapse;
-			padding: 5px;
+		.footer{
+			margin-top: 8%;
 		}
-		.tbSanPham{
+		table{
 			display: flex;
 			justify-content: center;
 		}
-		.them{
-			margin-left: 24%;
-			margin-bottom: 10px;
+		table td{
+			padding: 5px;
 		}
-		.nhap{
-			margin-bottom: 10px;
-			margin-left: 10px;
+		.tb2 td{
+			border: 1px solid;
+		}
+		.hoantat{
+			margin-top: 10px;
+			margin-left: 68%;
 			margin-right: 10px;
 		}
-		.ql{
-			margin-left: 69%;
-			margin-top: 10px;
-		}
-		.footer{
-			margin-top: 15%;
+		.tong{
+			margin-left: 22%;
+			margin-top: 5px;
 		}
 	</style>
 </head>
@@ -96,62 +93,103 @@
 	<?php
 	$conn = mysqli_connect("localhost","root","123456","quanlykhohang");
 	session_start();
+	$maPhieu = $_GET["id"];
+	$_SESSION["maPhieu"] = $maPhieu;
+	$sqlPhieu = "SELECT `maPhieu`, `ngayXuat`, `maNV`, `maDaiLy` FROM `phieuxuat` WHERE maPhieu = 		$maPhieu";
+	$phieu = mysqli_fetch_assoc(mysqli_query($conn,$sqlPhieu));
+	$maDaiLy = $phieu["maDaiLy"];
+	$sqlDaiLy = "SELECT `maDaiLy`, `tenDaiLy`, `sDT`, `diaChi` FROM `daily` WHERE maDaiLy = 			$maDaiLy";
+	$daiLy = mysqli_fetch_assoc(mysqli_query($conn,$sqlDaiLy));
+	$tenDaiLy = $daiLy["tenDaiLy"];
 	?>
 	<div>
 		<p align="right">Xin chào, <?php echo $_SESSION["tenNV"] ?> <a href="xulyDX.php">Đăng xuất</a></p>
 	</div>
-	<h2 align="center">Danh sách sản phẩm</h2>
-	<input type="button" value="Thêm sản phẩm" class="them" onClick="ThemSP()">
-	<input type="button" value="Nhập sản phẩm" class="nhap" onClick="NhapSP()">
-	<input type="button" value="Xuất sản phẩm" class="xuat" onClick="XuatSP()">
-	<table class="tbSanPham">
+	<h2 align="center">Phiếu xuất sản phẩm</h2>
+	<form action="#" method="post">
+		<table class="tb1">
 		<tr>
-			<td>Mã sản phẩm</td>
-			<td>Tên sản phẩm</td>
-			<td>Số lượng</td>
-			<td>Đơn vị tính</td>
-			<td>Kích thước</td>
-			<td>Loại sản phẩm</td>
-			<td colspan="3" align="center">Chức năng</td>
+			<td>Mã nhân viên:</td>
+			<td><?php echo $phieu["maNV"] ?></td>
 		</tr>
-		<?php
-			$sqlGoiSanPham = "SELECT * FROM `sanpham`";
-			$dsSanPham = mysqli_query($conn, $sqlGoiSanPham);
-			while($row = mysqli_fetch_assoc($dsSanPham)){
-				$maSP = $row["maSP"];
-				$sqlGoiSoNhap = "SELECT  sum(soLuongNhap)
-				from phieunhapsanpham
-				WHERE maSP = $maSP
-				GROUP by maSP";
-				$soLuongNhap = mysqli_fetch_assoc(mysqli_query($conn, $sqlGoiSoNhap));
-				$sqlGoiSoXuat = "SELECT  sum(soLuongXuat)
-				from phieuxuatsanpham
-				WHERE maSP = $maSP
-				GROUP by maSP";
-				$soLuongXuat = mysqli_fetch_assoc(mysqli_query($conn, $sqlGoiSoXuat));
-				if($soLuongXuat)
-					$soLuong = $soLuongNhap["sum(soLuongNhap)"]-$soLuongXuat["sum(soLuongXuat)"];
-				else if($soLuongNhap)
-					$soLuong = $soLuongNhap["sum(soLuongNhap)"];
-				else
-					$soLuong = 0;
-		?>
 		<tr>
-			<td><?php echo $maSP ?></td>
-			<td><?php echo $row["tenSP"] ?></td>
-			<td><?php echo $soLuong ?></td>
-			<td><?php echo $row["donViTinh"] ?></td>
-			<td><?php echo $row["kichThuoc"] ?></td>
-			<td><?php echo $row["loaiSP"] ?></td>
-			<td><a href="ChiTietSanPham.php?id=<?php echo $maSP ?>">Chi tiết</a></td>
-			<td><a href="SuaSanPham.php?id=<?php echo $maSP ?>">Sửa</a></td>
-			<td><a href="xulyXoaSP.php?id=<?php echo $maSP ?>">Xóa</a></td>
+			<td>Ngày xuất:</td>
+			<td><input type="date" name="ngayXuat" value="<?php echo $phieu["ngayXuat"] ?>"></td>
 		</tr>
-		<?php
-			}
+		<tr>
+			<td>Đại lý:</td>
+			<td><select name="maDaiLy">
+				<option disabled>Mã đại lý - Tên đại lý</option>
+				<option value="<?php echo $maDaiLy ?>"><?php echo("$maDaiLy - $tenDaiLy") ?></option>
+				<?php
+				$sql = "SELECT `maDaiLy`, `tenDaiLy`, `sDT`, `diaChi` FROM `daily`";
+				$dsDL = mysqli_query($conn,$sql);
+				while($row = mysqli_fetch_assoc($dsDL)){
+					$mdl = $row["maDaiLy"];
+					$tdl = $row["tenDaiLy"];
+				?>
+				<option value="<?php echo $row["maDaiLy"] ?>"><?php echo("$mdl - $tdl") ?></option>
+				<?php
+				}
+				?>
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td>Số điện thoại:</td>
+			<td><?php echo $daiLy["sDT"] ?></td>
+		</tr>
+		<tr>
+			<td>Địa chỉ:</td>
+			<td><?php echo $daiLy["diaChi"] ?></td>
+		</tr>
+		</table>
+		<h3 align="center">Danh sách sản phẩm</h3>
+		<table class="tb2">
+			<tr>
+				<td>Tên sản phẩm</td>
+				<td>Ngày sản xuất</td>
+				<td>Hạn sử dụng</td>
+				<td>Số lượng xuất</td>
+				<td>Đơn vị tính</td>
+				<td>Đơn giá</td>
+				<td>Thành tiền</td>
+				<td>Chức năng</td>
+			</tr>
+			<?php
+			$sqlSPX = "SELECT `maSP`, `maCTSP`, `soLuongXuat`, `donGia` FROM `phieuxuatsanpham` WHERE 	maPhieu = $maPhieu";
+			$dsSPX = mysqli_query($conn,$sqlSPX);
+			while($row = mysqli_fetch_assoc($dsSPX)){
+				$maCTSP = $row["maCTSP"];
+				$sqlSanPham = "SELECT  `ngaySanXuat`, `hanSD`, tenSP, donViTinh 
+					FROM `chitietsanpham` INNER JOIN sanpham on sanpham.maSP=chitietsanpham.maSP
+					WHERE maCTSP = $maCTSP";
+				$sanPham = mysqli_fetch_assoc(mysqli_query($conn,$sqlSanPham));
+				$date = date_create($sanPham["ngaySanXuat"]);
 			?>
-	</table>
-	<input type="button" class="ql" value="Về trang chủ" onClick="QuayLai()">
+			<tr>
+				<td><?php echo $sanPham["tenSP"] ?></td>
+				<td><?php echo date_format($date,"d-m-Y") ?></td>
+				<td><?php echo $sanPham["hanSD"] ?></td>
+				<td><?php echo $row["soLuongXuat"] ?></td>
+				<td><?php echo $sanPham["donViTinh"] ?></td>
+				<td><?php echo $row["donGia"] ?></td>
+				<td><?php echo $row["donGia"]*$row["soLuongXuat"] ?></td>
+				<td align="center"><a href="#">Sửa</a></td>
+			</tr>
+			<?php
+			}
+			$sqlTong = "SELECT SUM(soLuongXuat*donGia) FROM `phieuxuatsanpham` 
+				WHERE maPhieu = $maPhieu
+				GROUP BY maPhieu";
+			$tong = mysqli_fetch_assoc(mysqli_query($conn,$sqlTong));
+			$tongTien = $tong["SUM(soLuongXuat*donGia)"];
+			?>
+		</table>
+		<p class="tong"><?php echo("Tổng tiền: $tongTien") ?></p>
+		<input type="submit" value="Hoàn tất" class="hoantat">
+		<input type="button" value="Quay lại" onClick="QuayLai()">
+	</form>
 	<div class="footer">
 		<div id="footer-wapper">
       <div class="container">
@@ -163,22 +201,10 @@
       by <a href="/" rel="nofllow" target="_blank">DHK Group</a>
    </div>
 	</div>
-	<?php
-	mysqli_close($conn);
-	?>
 </body>
 </html>
 <script>
-	function ThemSP(){
-		location.replace("ThemSanPham.php");
-	}
-	function NhapSP(){
-		location.replace("PhieuNhap.php");
-	}
-	function XuatSP(){
-		location.replace("PhieuXuat.php");
-	}
 	function QuayLai(){
-		location.replace("TrangChu.php");
+		location.replace("PhieuXuat.php");
 	}
 </script>
