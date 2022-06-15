@@ -100,7 +100,7 @@
 		<p align="right">Xin chào, <?php echo $_SESSION["tenNV"] ?> <a href="xulyDX.php">Đăng xuất</a></p>
 	</div>
 	<h2 align="center">Danh sách phiếu nhập</h2>
-	<input type="button" value="Thêm mới" class="them">
+	<input type="button" value="Thêm mới" class="them" onClick="Themmoi()">
 	<input type="button" value="Báo cáo thống kê" class="baocao">
 	<table class = "tbPN">
 		<tr>
@@ -145,5 +145,8 @@
 <script>
 	function Quaylai(){
 		location.replace("SanPham.php");
+	}
+	function Themmoi(){
+		location.replace("ThemPhieuNhap.php");
 	}
 </script>

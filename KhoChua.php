@@ -32,12 +32,12 @@
 			border: 1px solid;
 		}
 		.them{
-			margin-left: 30.5%;
+			margin-left: 28%;
 			margin-bottom: 10px;
 		}
 		.ql{
 			margin-top: 10px;
-			margin-left: 63%;
+			margin-left: 65%;
 		}
 	</style>
 </head>
@@ -98,6 +98,7 @@
 	<input type="button" value="Thêm kho chứa" class="them" onClick="Themmoi()">
 	<table>
 		<tr>
+			<td>Mã kho</td>
 			<td>Tên kho</td>
 			<td>Địa chỉ</td>
 			<td>Kích thước</td>
@@ -144,6 +145,7 @@
 				}
 		?>
 		<tr>
+			<td><?php echo $dsKho["maKho"] ?></td>
 			<td><?php echo $dsKho["tenKho"] ?></td>
 			<td><?php echo $dsKho["diaChi"] ?></td>
 			<td><?php echo $dsKho["kichThuoc"] ?></td>
