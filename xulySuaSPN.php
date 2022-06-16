@@ -39,7 +39,7 @@
 		?>
 	<script>
 		function DieuHuong(){
-			alert("Kho chứa chỉ có thể chứa thêm <?php echo $soLuongChua ?> sản phẩm này");
+			alert("Kho chứa chỉ có thể chứa thêm <?php echo floor($soLuongChua) ?> sản phẩm này");
 			location.replace("ChiTietPhieuNhap.php?id=<?php echo $maPN ?>")
 		}
 		DieuHuong();

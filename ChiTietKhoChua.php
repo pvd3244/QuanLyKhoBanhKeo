@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Quản lý sản phẩm</title>
+<title>Xem sản phẩm trong kho</title>
 	<meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,30 +20,24 @@
 		a{
 		text-decoration: none;
 		}
-		.tbSanPham td{
-			border: 1px solid;
-			border-collapse: collapse;
-			padding: 5px;
+		.footer{
+			margin-top: 8%;
 		}
-		.tbSanPham{
+		h3{
+			color: red;
+		}
+		table{
+			margin-top: 10px;
 			display: flex;
 			justify-content: center;
 		}
-		.them{
-			margin-left: 24%;
-			margin-bottom: 10px;
-		}
-		.nhap{
-			margin-bottom: 10px;
-			margin-left: 10px;
-			margin-right: 10px;
+		table td{
+			border: 1px solid;
+			padding: 5px;
 		}
 		.ql{
-			margin-left: 69%;
+			margin-left: 63%;
 			margin-top: 10px;
-		}
-		.footer{
-			margin-top: 15%;
 		}
 	</style>
 </head>
@@ -100,58 +94,72 @@
 	<div>
 		<p align="right">Xin chào, <?php echo $_SESSION["tenNV"] ?> <a href="xulyDX.php">Đăng xuất</a></p>
 	</div>
-	<h2 align="center">Danh sách sản phẩm</h2>
-	<input type="button" value="Thêm sản phẩm" class="them" onClick="ThemSP()">
-	<input type="button" value="Nhập sản phẩm" class="nhap" onClick="NhapSP()">
-	<input type="button" value="Xuất sản phẩm" class="xuat" onClick="XuatSP()">
-	<table class="tbSanPham">
+	<h2 align="center">Danh sách sản phẩm trong kho</h2>
+	<?php
+	$maKho = $_GET["id"];
+	$sqlKT = "SELECT `maSP`, `maCTSP`, `soLuongNhap` FROM `phieunhapsanpham` 
+			WHERE maKho = $maKho";
+	$kiemTra1 = mysqli_query($conn, $sqlKT);
+	$kiemTra = mysqli_query($conn, $sqlKT);
+	$check = mysqli_fetch_assoc($kiemTra1);
+	if(!isset($check)){
+		echo("<h3 align = 'center'>Kho chứa này không chứa sản phẩm nào</h3>");	
+	}
+	else{
+		?>
+	<table>
 		<tr>
-			<td>Mã sản phẩm</td>
 			<td>Tên sản phẩm</td>
-			<td>Số lượng</td>
 			<td>Đơn vị tính</td>
-			<td>Kích thước</td>
-			<td>Loại sản phẩm</td>
-			<td colspan="3" align="center">Chức năng</td>
+			<td>Số lượng</td>
+			<td>Ngày sản xuất</td>
+			<td>Hạn sử dụng</td>
 		</tr>
 		<?php
-			$sqlGoiSanPham = "SELECT * FROM `sanpham`";
-			$dsSanPham = mysqli_query($conn, $sqlGoiSanPham);
-			while($row = mysqli_fetch_assoc($dsSanPham)){
-				$maSP = $row["maSP"];
+		while($kho = mysqli_fetch_assoc($kiemTra)){
+			$maSP = $kho["maSP"];
+			$maCTSP = $kho["maCTSP"];
+			$sqlGoiSanPham = "SELECT `tenSP`, `donViTinh` FROM `sanpham` WHERE maSP = $maSP";
+			$sanPham = mysqli_fetch_assoc(mysqli_query($conn, $sqlGoiSanPham));
+			$tenSP = $sanPham["tenSP"];
+			$donViTinh = $sanPham["donViTinh"];
+			$sqlCTSP = "SELECT `maCTSP`,`ngaySanXuat`, `hanSD` FROM `chitietsanpham` 
+			WHERE maCTSP = $maCTSP";
+			$CTSP = mysqli_query($conn, $sqlCTSP);
+			while($row = mysqli_fetch_assoc($CTSP)){
+				$date = date_create($row["ngaySanXuat"]);
+				$maCTSP = $row["maCTSP"];
 				$sqlGoiSoNhap = "SELECT  sum(soLuongNhap)
 				from phieunhapsanpham
-				WHERE maSP = $maSP
-				GROUP by maSP";
+				WHERE maCTSP = $maCTSP
+				GROUP by maCTSP";
 				$soLuongNhap = mysqli_fetch_assoc(mysqli_query($conn, $sqlGoiSoNhap));
 				$sqlGoiSoXuat = "SELECT  sum(soLuongXuat)
 				from phieuxuatsanpham
-				WHERE maSP = $maSP
-				GROUP by maSP";
+				WHERE maCTSP = $maCTSP
+				GROUP by maCTSP";
 				$soLuongXuat = mysqli_fetch_assoc(mysqli_query($conn, $sqlGoiSoXuat));
 				if($soLuongXuat)
 					$soLuong = $soLuongNhap["sum(soLuongNhap)"]-$soLuongXuat["sum(soLuongXuat)"];
-				else if($soLuongNhap)
-					$soLuong = $soLuongNhap["sum(soLuongNhap)"];
 				else
-					$soLuong = 0;
-		?>
+					$soLuong = $soLuongNhap["sum(soLuongNhap)"];
+				?>
 		<tr>
-			<td><?php echo $maSP ?></td>
-			<td><?php echo $row["tenSP"] ?></td>
+			<td><?php echo $tenSP ?></td>
+			<td><?php echo $donViTinh ?></td>
 			<td><?php echo $soLuong ?></td>
-			<td><?php echo $row["donViTinh"] ?></td>
-			<td><?php echo $row["kichThuoc"] ?></td>
-			<td><?php echo $row["loaiSP"] ?></td>
-			<td><a href="ChiTietSanPham.php?id=<?php echo $maSP ?>">Chi tiết</a></td>
-			<td><a href="SuaSanPham.php?id=<?php echo $maSP ?>">Sửa</a></td>
-			<td><a href="xulyXoaSP.php?id=<?php echo $maSP ?>">Xóa</a></td>
+			<td><?php echo date_format($date,"d-m-Y") ?></td>
+			<td><?php echo $row["hanSD"] ?></td>
 		</tr>
 		<?php
 			}
+			}
 			?>
 	</table>
-	<input type="button" class="ql" value="Về trang chủ" onClick="QuayLai()">
+	<?php
+	}
+	?>
+	<input type="button" value="Quay lại" onClick="DieuHuong()" class="ql">
 	<div class="footer">
 		<div id="footer-wapper">
       <div class="container">
@@ -163,22 +171,10 @@
       by <a href="/" rel="nofllow" target="_blank">DHK Group</a>
    </div>
 	</div>
-	<?php
-	mysqli_close($conn);
-	?>
 </body>
 </html>
 <script>
-	function ThemSP(){
-		location.replace("ThemSanPham.php");
-	}
-	function NhapSP(){
-		location.replace("PhieuNhap.php");
-	}
-	function XuatSP(){
-		location.replace("PhieuXuat.php");
-	}
-	function QuayLai(){
-		location.replace("TrangChu.php");
+	function DieuHuong(){
+		location.replace("KhoChua.php");
 	}
 </script>

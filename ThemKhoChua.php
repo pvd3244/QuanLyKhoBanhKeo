@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Quản lý sản phẩm</title>
+<title>Thêm kho chứa</title>
 	<meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,30 +20,20 @@
 		a{
 		text-decoration: none;
 		}
-		.tbSanPham td{
-			border: 1px solid;
-			border-collapse: collapse;
-			padding: 5px;
+		.footer{
+			margin-top: 8%;
 		}
-		.tbSanPham{
+		table{
 			display: flex;
 			justify-content: center;
 		}
+		table td{
+			padding: 5px;
+		}
 		.them{
-			margin-left: 24%;
-			margin-bottom: 10px;
-		}
-		.nhap{
-			margin-bottom: 10px;
-			margin-left: 10px;
-			margin-right: 10px;
-		}
-		.ql{
-			margin-left: 69%;
+			margin-left: 51%;
 			margin-top: 10px;
-		}
-		.footer{
-			margin-top: 15%;
+			margin-right: 10px;
 		}
 	</style>
 </head>
@@ -100,58 +90,57 @@
 	<div>
 		<p align="right">Xin chào, <?php echo $_SESSION["tenNV"] ?> <a href="xulyDX.php">Đăng xuất</a></p>
 	</div>
-	<h2 align="center">Danh sách sản phẩm</h2>
-	<input type="button" value="Thêm sản phẩm" class="them" onClick="ThemSP()">
-	<input type="button" value="Nhập sản phẩm" class="nhap" onClick="NhapSP()">
-	<input type="button" value="Xuất sản phẩm" class="xuat" onClick="XuatSP()">
-	<table class="tbSanPham">
-		<tr>
-			<td>Mã sản phẩm</td>
-			<td>Tên sản phẩm</td>
-			<td>Số lượng</td>
-			<td>Đơn vị tính</td>
-			<td>Kích thước</td>
-			<td>Loại sản phẩm</td>
-			<td colspan="3" align="center">Chức năng</td>
-		</tr>
-		<?php
-			$sqlGoiSanPham = "SELECT * FROM `sanpham`";
-			$dsSanPham = mysqli_query($conn, $sqlGoiSanPham);
-			while($row = mysqli_fetch_assoc($dsSanPham)){
-				$maSP = $row["maSP"];
-				$sqlGoiSoNhap = "SELECT  sum(soLuongNhap)
-				from phieunhapsanpham
-				WHERE maSP = $maSP
-				GROUP by maSP";
-				$soLuongNhap = mysqli_fetch_assoc(mysqli_query($conn, $sqlGoiSoNhap));
-				$sqlGoiSoXuat = "SELECT  sum(soLuongXuat)
-				from phieuxuatsanpham
-				WHERE maSP = $maSP
-				GROUP by maSP";
-				$soLuongXuat = mysqli_fetch_assoc(mysqli_query($conn, $sqlGoiSoXuat));
-				if($soLuongXuat)
-					$soLuong = $soLuongNhap["sum(soLuongNhap)"]-$soLuongXuat["sum(soLuongXuat)"];
-				else if($soLuongNhap)
-					$soLuong = $soLuongNhap["sum(soLuongNhap)"];
-				else
-					$soLuong = 0;
-		?>
-		<tr>
-			<td><?php echo $maSP ?></td>
-			<td><?php echo $row["tenSP"] ?></td>
-			<td><?php echo $soLuong ?></td>
-			<td><?php echo $row["donViTinh"] ?></td>
-			<td><?php echo $row["kichThuoc"] ?></td>
-			<td><?php echo $row["loaiSP"] ?></td>
-			<td><a href="ChiTietSanPham.php?id=<?php echo $maSP ?>">Chi tiết</a></td>
-			<td><a href="SuaSanPham.php?id=<?php echo $maSP ?>">Sửa</a></td>
-			<td><a href="xulyXoaSP.php?id=<?php echo $maSP ?>">Xóa</a></td>
-		</tr>
-		<?php
-			}
+	<h2 align="center">Thêm kho chứa</h2>
+	<form action="ThemKhoChua.php" method="post">
+		<table>
+			<tr>
+				<td>Tên kho:</td>
+				<td><input type="text" name="tenKho"></td>
+			</tr>
+			<tr>
+				<td>Địa chỉ:</td>
+				<td><input type="text" name="diaChi"></td>
+			</tr>
+			<tr>
+				<td>Kích thước:</td>
+				<td><input type="text" name="kichThuoc" placeholder="Đơn vị mét khối"></td>
+			</tr>
+			<tr>
+				<td>Loại kho:</td>
+				<td><select name="loaiKho">
+					<option value="Loại 1">Loại 1(-20*C -> 0*C)</option>
+					<option value="Loại 2">Loại 2(1*C -> 18*C)</option>
+					<option value="Loại 3">Loại 3(19*C -> 26*C)</option>
+					<option value="Khác">Khác</option>
+				</td>
+			</tr>
+		</table>
+		<input type="submit" value="Thêm" class="them" name="them">
+		<input type="button" value="Quay lại" onClick="DieuHuong()">
+	</form>
+	<?php
+	if(isset($_POST["them"])){
+		$tenKho = $_POST["tenKho"];
+		$diaChi = $_POST["diaChi"];
+		$kichThuoc = $_POST["kichThuoc"];
+		$loaiKho = $_POST["loaiKho"];
+		if($tenKho=="" || $diaChi=="" || $kichThuoc==""){
+			echo("<p align='center'>Vui lòng điền đầy đủ thông tin</p>");
+		}
+		else if(!is_numeric($kichThuoc)){
+			echo("<p align='center'>Kích thước của kho là một số</p>");
+		}
+		else{
+			$sql = "INSERT INTO `kho`(`tenKho`, `diaChi`, `kichThuoc`, `loaiKho`) VALUES ('$tenKho','$diaChi',$kichThuoc,'$loaiKho')";
+			mysqli_query($conn, $sql);
 			?>
-	</table>
-	<input type="button" class="ql" value="Về trang chủ" onClick="QuayLai()">
+	<script>
+		location.replace("KhoChua.php");
+	</script>
+	<?php
+		}
+	}
+	?>
 	<div class="footer">
 		<div id="footer-wapper">
       <div class="container">
@@ -163,22 +152,10 @@
       by <a href="/" rel="nofllow" target="_blank">DHK Group</a>
    </div>
 	</div>
-	<?php
-	mysqli_close($conn);
-	?>
 </body>
 </html>
 <script>
-	function ThemSP(){
-		location.replace("ThemSanPham.php");
-	}
-	function NhapSP(){
-		location.replace("PhieuNhap.php");
-	}
-	function XuatSP(){
-		location.replace("PhieuXuat.php");
-	}
-	function QuayLai(){
-		location.replace("TrangChu.php");
+	function DieuHuong(){
+		location.replace("KhoChua.php");
 	}
 </script>
