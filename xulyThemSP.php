@@ -4,7 +4,7 @@
 <title>Untitled Document</title>
 </head>
 <?php
-	$conn = mysqli_connect("localhost","root","123456","quanlykhohang");
+	require("KetNoiCSDL.php");
 	$tenSP = $_POST["tenSP"];
 	$donVT = $_POST["dVT"];
 	$kichThuoc = $_POST["kichThuoc"];

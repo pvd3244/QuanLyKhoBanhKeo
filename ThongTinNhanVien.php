@@ -67,17 +67,17 @@
                      </a>
                   </li>
                   <li class="nav-item">
-                     <a class="nav-link" href="">
+                     <a class="nav-link" href="KiemTraTK.php">
                         Quản lý nhân viên
                      </a>
                   </li>
                   <li class="nav-item">
-                     <a class="nav-link" href="">
+                     <a class="nav-link" href="DaiLy.php">
                         Quản lý đại lý
                      </a>
                   </li>
                   <li class="nav-item">
-                     <a class="nav-link" href="">
+                     <a class="nav-link" href="KhoChua.php">
                         Quản lý kho
                      </a>
                   </li>
@@ -87,7 +87,7 @@
       </nav>
    </div>
 	<?php
-	$conn = mysqli_connect("localhost","root","123456","quanlykhohang");
+	require("KetNoiCSDL.php");
 	session_start();
 	$maNV = $_SESSION["maNV"];
 	$sql = "SELECT * FROM `nhanvien` 
@@ -144,7 +144,7 @@
 		</div>
 		<?php
 		if(isset($_POST["doiMK"])){
-		$conn = mysqli_connect("localhost","root","123456","quanlykhohang");
+		require("KetNoiCSDL.php");
 		$maNV = $_SESSION["maNV"];
 		$mkCu = $_POST["mkCu"];
 		$mkMoi = $_POST["mkMoi"];

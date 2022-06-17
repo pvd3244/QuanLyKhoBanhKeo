@@ -4,7 +4,7 @@
 <title>Untitled Document</title>
 </head>
 <?php
-	$conn = mysqli_connect("localhost","root","123456","quanlykhohang");
+	require("KetNoiCSDL.php");
 	$sql = "DROP TABLE IF EXISTS sanphamnhap";
 	mysqli_query($conn,$sql);
 	header("location: /CodeBTL/PhieuNhap.php");

@@ -87,7 +87,7 @@
       </nav>
    </div>
 	<?php
-	$conn = mysqli_connect("localhost","root","123456","quanlykhohang");
+	require("KetNoiCSDL.php");
 	session_start();
 	$maPhieu = $_SESSION["maPhieu"];
 	$maCTSP = $_GET["id"];

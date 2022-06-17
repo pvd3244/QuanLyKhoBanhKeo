@@ -5,7 +5,7 @@
 <title>Untitled Document</title>
 </head>
 <?php
-	$conn = mysqli_connect("localhost","root","123456","quanlykhohang");
+	require("KetNoiCSDL.php");
 	$maDaiLy = $_GET["id"];
 	$sql = "DELETE FROM `daily` WHERE maDaiLy = $maDaiLy";
 	mysqli_query($conn,$sql);

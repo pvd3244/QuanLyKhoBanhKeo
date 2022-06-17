@@ -4,7 +4,7 @@
 <title>Untitled Document</title>
 </head>
 <?php
-	$conn = mysqli_connect("localhost","root","123456","quanlykhohang");
+	require("KetNoiCSDL.php");
 	session_start();
 	$maKho = $_GET["id"];
 	$sql = "SELECT * FROM `phieunhapsanpham` WHERE maKho = $maKho";

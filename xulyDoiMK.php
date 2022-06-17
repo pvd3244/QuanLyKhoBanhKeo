@@ -8,7 +8,7 @@
 	if(isset($_POST["doiMK"])){
 		session_start();
 	header('X-UA-Compatible: IE=edge; charset=UTF-8');
-		$conn = mysqli_connect("localhost","root","123456","quanlykhohang");
+		require("KetNoiCSDL.php");
 		$maNV = $_SESSION["maNV"];
 		$mkCu = $_POST["mkCu"];
 		$mkMoi = $_POST["mkMoi"];

@@ -7,7 +7,7 @@
 <?php
 	session_start();
 	$maNV = $_SESSION["maNV"];
-	$conn = mysqli_connect("localhost","root","123456","quanlykhohang");
+	require("KetNoiCSDL.php");
 	$tenNV = $_POST["tenNV"];
 	$diaChi = $_POST["diaChi"];
 	$sDT = $_POST["sDT"];

@@ -11,7 +11,7 @@ session_start();
 header('Content-Type: text/html; charset=UTF-8');
 if (isset($_POST['dangnhap']))
 {
-$conn = mysqli_connect ('localhost', 'root', '123456', 'quanlykhohang');
+require("KetNoiCSDL.php");
   
 $username = $_POST['username'];
 $password = $_POST['password'];

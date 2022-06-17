@@ -5,7 +5,7 @@
 <title>Untitled Document</title>
 </head>
 <?php
-	$conn = mysqli_connect("localhost","root","123456","quanlykhohang");
+	require("KetNoiCSDL.php");
 	session_start();
 	$maDaiLy = $_SESSION["maDaiLy"];
 	$tenDaiLy = $_POST["tenDaiLy"];

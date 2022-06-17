@@ -4,15 +4,15 @@
 <title>Untitled Document</title>
 </head>
 <?php
-	$conn = mysqli_connect("localhost","root","123456","quanlykhohang");
+	require("KetNoiCSDL.php");
 	session_start();
 	function TruyVan($sql){
-		$conn = mysqli_connect("localhost","root","123456","quanlykhohang");
+		require("KetNoiCSDL.php");
 		$dsTruyVan = mysqli_query($conn, $sql);
 		return $dsTruyVan;
 	}
 	function GoiGiaTri($tenGiaTri, $sql){
-		$conn = mysqli_connect("localhost","root","123456","quanlykhohang");
+		require("KetNoiCSDL.php");
 		$gtTruyVan = mysqli_fetch_assoc(mysqli_query($conn,$sql));
 		if(isset($gtTruyVan))
 			return $gtTruyVan["$tenGiaTri"];

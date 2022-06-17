@@ -78,7 +78,7 @@
                      </a>
                   </li>
                   <li class="nav-item">
-                     <a class="nav-link" href="">
+                     <a class="nav-link" href="KhoChua.php">
                         Quản lý kho
                      </a>
                   </li>
@@ -88,7 +88,7 @@
       </nav>
    </div>
 	<?php
-	$conn = mysqli_connect("localhost","root","123456","quanlykhohang");
+	require("KetNoiCSDL.php");
 	session_start();
 	?>
 	<div>
