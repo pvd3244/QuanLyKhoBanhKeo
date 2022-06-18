@@ -97,7 +97,7 @@
 	</div>
 	<h2 align="center">Danh sách phiếu xuất</h2>
 	<input type="button" value="Thêm mới" class="them" onClick="ThemMoi()">
-	<input type="button" value="Thống kê báo cáo">
+	<input type="button" value="Thống kê báo cáo" onClick="BaoCao()">
 	<table>
 		<tr>
 			<td>Mã phiếu xuất</td>
@@ -143,5 +143,8 @@
 	}
 	function ThemMoi(){
 		location.replace("ThemPhieuXuat.php");
+	}
+	function BaoCao(){
+		location.replace("BaoCaoPX.php");
 	}
 </script>

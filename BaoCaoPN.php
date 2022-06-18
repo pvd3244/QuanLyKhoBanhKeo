@@ -1,7 +1,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>Quản lý nhập sản phẩm</title>
+<title>Hoạt động nhập kho</title>
 	<meta charset="UTF-8">
    <meta http-equiv="X-UA-Compatible" content="IE=edge">
    <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -20,29 +20,27 @@
 		a{
 		text-decoration: none;
 		}
-		.them{
-			margin-left: 37%;
-			margin-bottom: 10px;
+		.footer{
+			margin-top: 8%;
 		}
-		.baocao{
-			margin-right: 10px;
-			margin-bottom: 10px;
-		}
-		.tbPN{
+		table{
 			display: flex;
 			justify-content: center;
 		}
-		.tbPN td{
-			border: 1px solid;
-			border-collapse: collapse;
+		table td{
 			padding: 5px;
+			border: 1px solid;
 		}
 		.ql{
-			margin-left: 59%;
+			margin-left: 72%;
 			margin-top: 10px;
 		}
-		.footer{
-			margin-top: 8%;
+		.thoigian{
+			margin-left: 35%;
+			margin-top: 10px;
+		}
+		.thongbao{
+			margin-left: 24%;
 		}
 	</style>
 </head>
@@ -93,39 +91,86 @@
       </nav>
    </div>
 	<?php
-	require("KetNoiCSDL.php");
+	$conn = mysqli_connect("localhost","root","123456","quanlykhohang");
 	session_start();
+	function TruyVan($sql){
+		$conn = mysqli_connect("localhost","root","123456","quanlykhohang");
+		$dsTruyVan = mysqli_query($conn,$sql);
+		return $dsTruyVan;
+	}
 	?>
 	<div>
 		<p align="right">Xin chào, <?php echo $_SESSION["tenNV"] ?> <a href="xulyDX.php">Đăng xuất</a></p>
 	</div>
-	<h2 align="center">Danh sách phiếu nhập</h2>
-	<input type="button" value="Thêm mới" class="them" onClick="Themmoi()">
-	<input type="button" value="Báo cáo thống kê" class="baocao" onClick="BaoCao()">
-	<table class = "tbPN">
-		<tr>
-			<td>Mã phiếu</td>
-			<td>Ngày nhập</td>
-			<td>Mã nhân viên</td>
-			<td>Chức năng</td>
-		</tr>
+	<h2 align="center">Thống kê hoạt động nhập kho</h2>
+	<form method="post" action="BaoCaoPN.php">
+		<p class="thoigian">Ngày bắt đầu <input type="date" name="ngayBatDau" value="<?php echo date("Y-m-d") ?>"> Ngày kết thúc <input type="date" name="ngayKetThuc" value="<?php echo date("Y-m-d") ?>"> <input type="submit" value="Thống kê" name="thongKe"></p>
+		<h3 align="center">Danh sách sản phẩm</h3>
 		<?php
-			$sql = "SELECT * FROM `phieunhap`";
-			$dsPN = mysqli_query($conn, $sql);
-			while($row = mysqli_fetch_assoc($dsPN)){
-				$date = date_create($row["ngayNhap"]);
-		?>
-		<tr>
-			<td><?php echo $row["maPhieu"] ?></td>
-			<td><?php echo date_format($date, "d-m-Y") ?></td>
-			<td><?php echo $row["maNV"] ?></td>
-			<td align="center"><a href="ChiTietPhieuNhap.php?id=<?php echo $row["maPhieu"] ?>">Chi tiết</a></td>
-		</tr>
-		<?php
+			if(isset($_POST["thongKe"])){
+				$ngayBatDau = $_POST["ngayBatDau"];
+				$ngayKetThuc = $_POST["ngayKetThuc"];
+				$ngayBD = date_create($ngayBatDau);
+				$ngayKT = date_create($ngayKetThuc);
+				echo("<p class='thongbao'>Từ ".date_format($ngayBD,"d-m-Y")." đến ".date_format($ngayKT,"d-m-Y")." </p>");
 			}
 		?>
-	</table>
-	<input class="ql" type="button" value="Quay lại" onClick="Quaylai()">
+		<table>
+			<tr>
+			<td>Tên sản phẩm</td>
+			<td>Loại sản phẩm</td>
+			<td>Số lượng nhập</td>
+			<td>Đơn vị tính</td>
+			<td>Kích thước</td>
+			<td>Ngày sản xuất</td>
+			<td>Hạn sử dụng</td>
+		</tr>
+		<?php
+		if(isset($_POST["thongKe"])){
+			$ngayBatDau = $_POST["ngayBatDau"];
+			$ngayKetThuc = $_POST["ngayKetThuc"];
+			$dsSP = TruyVan("SELECT tenSP,donViTinh,kichThuoc,soLuongNhap,`ngaySanXuat`, `hanSD`,loaiSP  
+			FROM `chitietsanpham` INNER JOIN sanpham on chitietsanpham.maSP = sanpham.maSP INNER JOIN phieunhapsanpham
+			ON chitietsanpham.maCTSP = phieunhapsanpham.maCTSP INNER JOIN phieunhap on phieunhap.maPhieu = phieunhapsanpham.maPhieu
+			WHERE phieunhap.ngayNhap BETWEEN '$ngayBatDau' AND '$ngayKetThuc'");
+			while($row = mysqli_fetch_assoc($dsSP)){
+				$date = date_create($row["ngaySanXuat"]);
+			?>
+			<tr>
+				<td><?php echo $row["tenSP"] ?></td>
+				<td><?php echo $row["loaiSP"] ?></td>
+				<td><?php echo $row["soLuongNhap"] ?></td>
+				<td><?php echo $row["donViTinh"] ?></td>
+				<td><?php echo $row["kichThuoc"] ?></td>
+				<td><?php echo date_format($date,"d-m-Y") ?></td>
+				<td><?php echo $row["hanSD"] ?></td>
+			</tr>
+		<?php
+			}
+		}
+		else{
+			$dsSP = TruyVan("SELECT tenSP,donViTinh,kichThuoc,soLuongNhap,`ngaySanXuat`, `hanSD`,loaiSP  
+				FROM `chitietsanpham` INNER JOIN sanpham on chitietsanpham.maSP = sanpham.maSP INNER JOIN phieunhapsanpham
+				ON chitietsanpham.maCTSP = phieunhapsanpham.maCTSP WHERE 1");
+			while($row = mysqli_fetch_assoc($dsSP)){
+				$date = date_create($row["ngaySanXuat"]);
+		?>
+			<tr>
+				<td><?php echo $row["tenSP"] ?></td>
+				<td><?php echo $row["loaiSP"] ?></td>
+				<td><?php echo $row["soLuongNhap"] ?></td>
+				<td><?php echo $row["donViTinh"] ?></td>
+				<td><?php echo $row["kichThuoc"] ?></td>
+				<td><?php echo date_format($date,"d-m-Y") ?></td>
+				<td><?php echo $row["hanSD"] ?></td>
+			</tr>
+		<?php
+			}
+		}
+		?>
+		</table>
+	</form>
+	<input type="button" value="Quay lại" onClick="QuayLai()" class="ql">
 	<div class="footer">
 		<div id="footer-wapper">
       <div class="container">
@@ -137,19 +182,10 @@
       by <a href="/" rel="nofllow" target="_blank">DHK Group</a>
    </div>
 	</div>
-	<?php
-	mysqli_close($conn);
-	?>
 </body>
 </html>
 <script>
-	function Quaylai(){
-		location.replace("SanPham.php");
-	}
-	function Themmoi(){
-		location.replace("ThemPhieuNhap.php");
-	}
-	function BaoCao(){
-		location.replace("BaoCaoPN.php");
+	function QuayLai(){
+		location.replace("PhieuNhap.php");
 	}
 </script>
